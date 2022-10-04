@@ -14,7 +14,7 @@ namespace SistemaAutenticacao.Controllers
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login ([FromBody] Usuario body)
+        public IActionResult Login ([FromBody] Usuario body)
         {
             var usuario = _usuarios.Get(body.Username, body.Senha);
             
@@ -32,7 +32,7 @@ namespace SistemaAutenticacao.Controllers
 
         [HttpGet("autenticado")]
         [Authorize]
-        public async Task<IActionResult> Autenticado ()
+        public IActionResult Autenticado ()
         {
             return Ok(new { usuario = $"Usuário autenticado: {User.Identity.Name}" });
         }
@@ -40,7 +40,7 @@ namespace SistemaAutenticacao.Controllers
 
         [HttpGet("gerente")]
         [Authorize(Roles = "Gerente")]
-        public async Task<IActionResult> DadosGerente ()
+        public IActionResult DadosGerente ()
         {
             return Ok(new { res = "Dados visíveis apenas para gerentes." });
         }
@@ -48,7 +48,7 @@ namespace SistemaAutenticacao.Controllers
 
         [HttpGet("funcionarios")]
         [Authorize(Roles = "Gerente,Auxiliar")]
-        public async Task<IActionResult> DadosFuncionarios()
+        public IActionResult DadosFuncionarios()
         {
             return Ok(new { res = "Dados visíveis para todos funcionários." });
         }
