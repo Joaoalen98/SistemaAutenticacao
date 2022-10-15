@@ -11,7 +11,7 @@ namespace SistemaAutenticacao.Data
             new Usuario { Id = 2, Username = "auxiliar", Senha = "senhaAuxiliar", Cargo = "Auxiliar" }
         };
 
-        public Usuario Get (string userName, string password)
+        public Usuario Get(string userName, string password)
         {
             return _usuarios.Where(u =>
                 u.Username == userName && u.Senha == password).FirstOrDefault();
