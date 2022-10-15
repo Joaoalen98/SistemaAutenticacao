@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SistemaAutenticacao.Data;
+using SistemaAutenticacao.Interfaces;
 using SistemaAutenticacao.Models;
 using SistemaAutenticacao.Services;
 
@@ -10,14 +10,19 @@ namespace SistemaAutenticacao.Controllers
     [Route("usuario")]
     public class UsuarioController : ControllerBase
     {
-        private UsuarioData _usuarios = new UsuarioData();
+        private IUsuarioController _usuarios;
+
+        public UsuarioController(IUsuarioController usuarioController)
+        {
+            _usuarios = usuarioController;
+        }
 
 
         [HttpPost("login")]
-        public IActionResult Login ([FromBody] Usuario body)
+        public IActionResult Login([FromBody] LoginViewModel body)
         {
-            var usuario = _usuarios.Get(body.Username, body.Senha);
-            
+            var usuario = _usuarios.GetUsuario(body);
+
             if (usuario == null)
             {
                 return BadRequest(new { res = "Usuário ou senha incorreta" });
@@ -32,7 +37,7 @@ namespace SistemaAutenticacao.Controllers
 
         [HttpGet("autenticado")]
         [Authorize]
-        public IActionResult Autenticado ()
+        public IActionResult Autenticado()
         {
             return Ok(new { usuario = $"Usuário autenticado: {User.Identity.Name}" });
         }
@@ -40,7 +45,7 @@ namespace SistemaAutenticacao.Controllers
 
         [HttpGet("gerente")]
         [Authorize(Roles = "Gerente")]
-        public IActionResult DadosGerente ()
+        public IActionResult DadosGerente()
         {
             return Ok(new { res = "Dados visíveis apenas para gerentes." });
         }

@@ -1,8 +1,9 @@
-﻿using SistemaAutenticacao.Models;
+﻿using SistemaAutenticacao.Interfaces;
+using SistemaAutenticacao.Models;
 
 namespace SistemaAutenticacao.Data
 {
-    public class UsuarioData
+    public class UsuarioData : IUsuarioController
     {
 
         private Usuario[] _usuarios = new Usuario[]
@@ -11,10 +12,10 @@ namespace SistemaAutenticacao.Data
             new Usuario { Id = 2, Username = "auxiliar", Senha = "senhaAuxiliar", Cargo = "Auxiliar" }
         };
 
-        public Usuario Get(string userName, string password)
+        public Usuario? GetUsuario(LoginViewModel dados)
         {
             return _usuarios.Where(u =>
-                u.Username == userName && u.Senha == password).FirstOrDefault();
+                u.Username == dados.UserName && u.Senha == u.Senha).FirstOrDefault();
         }
     }
 }
